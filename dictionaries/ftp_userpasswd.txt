@@ -1,0 +1,15 @@
+anonymous:ftp@ftp.com
+ftp:ftp
+root:root
+admin:admin
+root:12345
+admin:password
+upload:upload
+root:password
+root:123456
+root:password
+root:abc123
+root:abcabc
+test:test
+temp:temp
+public:public

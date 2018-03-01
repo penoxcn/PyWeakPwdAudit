@@ -1,0 +1,15 @@
+root:root
+root:mysql
+root:abc123
+root:123456
+root:password
+root:1qaz@WSX
+root:qwerty
+root:12345678
+root:123123
+root:111111
+root:temp
+root:
+mysql:mysql
+user:user
+admin:admin

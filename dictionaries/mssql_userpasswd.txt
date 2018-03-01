@@ -1,0 +1,17 @@
+sa:
+sa:sa
+sa:123
+sa:1234
+sa:123456
+sa:1234567
+sa:12345678
+sa:123123
+sa:abc123
+sa:abcabc
+sa:password
+sa:Password1
+sa:qwerty
+sa:111
+sa:111111
+test:test
+test:123456
