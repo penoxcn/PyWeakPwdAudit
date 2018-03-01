@@ -440,7 +440,7 @@ class NetBIOS:
         self.__broadcastaddr = BROADCAST_ADDR
         self.mac = '00-00-00-00-00-00'
 
-    def _setup_connection(self, dstaddr):
+    def _setup_connection(self, dstaddr, timeout = None):
         port = randint(10000, 60000)
         af, socktype, proto, _canonname, _sa = socket.getaddrinfo(dstaddr, port, socket.AF_INET, socket.SOCK_DGRAM)[0]
         s = socket.socket(af, socktype, proto)
@@ -498,7 +498,7 @@ class NetBIOS:
         return self.mac
 
     def __queryname(self, nbname, destaddr, qtype, scope, timeout, retries = 0):
-        self._setup_connection(destaddr)
+        self._setup_connection(destaddr, timeout)
         trn_id = randint(1, 32000)
         p = NetBIOSPacket()
         p.set_trn_id(trn_id)
@@ -544,7 +544,7 @@ class NetBIOS:
 
 
     def __querynodestatus(self, nbname, destaddr, type, scope, timeout):
-        self._setup_connection(destaddr)
+        self._setup_connection(destaddr, timeout)
         trn_id = randint(1, 32000)
         p = NetBIOSPacket()
         p.set_trn_id(trn_id)
@@ -713,7 +713,8 @@ class NetBIOSSession:
             # We are acting as a server
             self._sock = sock
         else:
-            self._sock = self._setup_connection((remote_host, sess_port))
+            ##print 'NetBIOSSession:init setup connection timeout: %d' % (timeout)
+            self._sock = self._setup_connection((remote_host, sess_port), timeout)
 
         if sess_port == NETBIOS_SESSION_PORT:
             self._request_session(remote_type, local_type, timeout)
@@ -772,7 +773,7 @@ class NetBIOSUDPSessionPacket(Structure):
         return self['Data']
 
 class NetBIOSUDPSession(NetBIOSSession):
-    def _setup_connection(self, peer):
+    def _setup_connection(self, peer, timeout = None):
         af, socktype, proto, canonname, sa = socket.getaddrinfo(peer[0], peer[1], 0, socket.SOCK_DGRAM)[0]
         sock = socket.socket(af, socktype, proto)
         sock.connect(sa)
@@ -836,10 +837,15 @@ class NetBIOSTCPSession(NetBIOSSession):
         NetBIOSSession.__init__(self, myname, remote_name, remote_host, remote_type = remote_type, sess_port = sess_port, timeout = timeout, local_type = local_type, sock=sock)                
 
 
-    def _setup_connection(self, peer):
+    def _setup_connection(self, peer, timeout = None):
         try:
             af, socktype, proto, canonname, sa = socket.getaddrinfo(peer[0], peer[1], 0, socket.SOCK_STREAM)[0]
             sock = socket.socket(af, socktype, proto)
+            ##print '*socket.timeout:'+str(sock.gettimeout())
+            ##print '*setting timeout to: %d' % (timeout)
+            if timeout is None:
+                timeout = 30
+            sock.settimeout(timeout)
             sock.connect(sa)
         except socket.error, e:
             raise socket.error("Connection error (%s:%s)" % (peer[0], peer[1]), e)
