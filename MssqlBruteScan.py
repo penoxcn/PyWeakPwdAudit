@@ -16,16 +16,17 @@ def main():
     
     opts, args = options.parse_args()
     try:
-        logger = xapp.initLogger(opts.logfile)
+        logger = xutils.initLogger(opts.logfile)
         if not os.path.isfile(opts.config):
             logger.error('config file {%s} is missing. bye!' % (opts.config) )
             return 1
         #TODO:
         #Please implement your loadConfig
         wcfg = loadConfig(opts.config)
-        config = {'threads':wcfg['THREADS'], 'userdict':wcfg['DICTFILE'], 'proto':wcfg['PROTO'].lower(),
-                   'ports':ports, 'maxruntime':int(wcfg['MAXTIME']),
-                   'processes':wcfg['PROCESSES'], 'logfile':opts.logfile, }
+        config = {'threads':wcfg['THREADS'], 'userdict':wcfg['DICTFILE'],
+                  'proto':wcfg['PROTO'].lower(),
+                  'ports':ports, 'maxruntime':int(wcfg['MAXTIME']),
+                  'processes':wcfg['PROCESSES'], 'logfile':opts.logfile, }
         bruter = Bruter(MssqlBruteTester)
         bruter.start(config)
     except Exception as e:
