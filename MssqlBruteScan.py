@@ -26,7 +26,7 @@ def main():
         config = {'threads':wcfg['THREADS'], 'userdict':wcfg['DICTFILE'], 'proto':wcfg['PROTO'].lower(),
                    'ports':ports, 'maxruntime':int(wcfg['MAXTIME']),
                    'processes':wcfg['PROCESSES'], 'logfile':opts.logfile, }
-        bruter = Bruter(BruteTesterClass)
+        bruter = Bruter(MssqlBruteTester)
         bruter.start(config)
     except Exception as e:
         sys.stderr.write('EXCEPTION: %s, pid: %d, exit.\n'%(str(e), os.getpid()))
