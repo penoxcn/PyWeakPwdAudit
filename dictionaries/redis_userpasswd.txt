@@ -1,0 +1,14 @@
+:
+:admin
+:password
+:123456
+:123123
+:abc123
+:test
+:hello
+:Password1
+:1qaz@wsx
+:1qaz@WSX
+:Password123
+:1234567
+:redis
